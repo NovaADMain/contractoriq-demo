@@ -28,6 +28,10 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .metric-card { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
         input:focus { outline: none; }
+        .tappable { cursor: pointer; transition: transform .12s, box-shadow .12s; }
+        .tappable:active { transform: scale(.985); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+        .job-chip { cursor: pointer; transition: background .15s, color .15s; }
+        .day-circle { cursor: pointer; transition: background .2s, color .2s; }
         .pulse-dot { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .login-input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 15px; color: #1e293b; transition: border-color 0.2s; font-family: 'Inter', sans-serif; }
@@ -111,7 +115,7 @@
                 <h1 id="page-title" class="text-xl font-bold mt-0.5">Overview</h1>
             </div>
             <div class="flex items-center gap-3">
-                <button class="w-9 h-9 bg-slate-700 rounded-xl flex items-center justify-center">
+                <button onclick="IQ.openNotifications()" class="w-9 h-9 bg-slate-700 rounded-xl flex items-center justify-center">
                     <svg width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 </button>
                 <div class="relative">
@@ -214,10 +218,10 @@
             <div class="card p-4 mb-4">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-900">Recent Activity</h3>
-                    <span class="text-xs font-semibold" style="color:#f97316;">See all →</span>
+                    <span onclick="IQ.toast('Loading full activity log…','info')" class="text-xs font-semibold" style="color:#f97316;cursor:pointer;">See all →</span>
                 </div>
                 <div class="space-y-4">
-                    <div class="flex items-start gap-3">
+                    <div onclick="IQ.activityTap('jobs')" class="flex items-start gap-3 tappable" style="padding:6px;border-radius:12px;">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#dcfce7;">
                             <svg width="15" height="15" fill="none" stroke="#16a34a" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                         </div>
@@ -227,7 +231,7 @@
                         </div>
                         <span class="text-xs text-slate-400 flex-shrink-0">2h ago</span>
                     </div>
-                    <div class="flex items-start gap-3">
+                    <div onclick="IQ.activityTap('leads')" class="flex items-start gap-3 tappable" style="padding:6px;border-radius:12px;">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#dbeafe;">
                             <svg width="15" height="15" fill="none" stroke="#2563eb" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </div>
@@ -237,7 +241,7 @@
                         </div>
                         <span class="text-xs text-slate-400 flex-shrink-0">4h ago</span>
                     </div>
-                    <div class="flex items-start gap-3">
+                    <div onclick="IQ.activityTap('estimates')" class="flex items-start gap-3 tappable" style="padding:6px;border-radius:12px;">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ffedd5;">
                             <svg width="15" height="15" fill="none" stroke="#ea580c" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
@@ -247,7 +251,7 @@
                         </div>
                         <span class="text-xs text-slate-400 flex-shrink-0">Yesterday</span>
                     </div>
-                    <div class="flex items-start gap-3">
+                    <div onclick="IQ.activityTap('schedule')" class="flex items-start gap-3 tappable" style="padding:6px;border-radius:12px;">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#f3e8ff;">
                             <svg width="15" height="15" fill="none" stroke="#9333ea" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         </div>
@@ -264,25 +268,25 @@
             <div class="card p-4">
                 <h3 class="font-bold text-slate-900 mb-4">Quick Actions</h3>
                 <div class="grid grid-cols-4 gap-2">
-                    <button class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
+                    <button onclick="IQ.newJob()" class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md" style="background:linear-gradient(135deg,#f97316,#ea580c);">
                             <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         </div>
                         <span class="text-xs font-semibold text-slate-700 text-center leading-tight">New Job</span>
                     </button>
-                    <button class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
+                    <button onclick="IQ.addLead()" class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">
                             <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </div>
                         <span class="text-xs font-semibold text-slate-700 text-center leading-tight">Add Lead</span>
                     </button>
-                    <button class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
+                    <button onclick="IQ.newEstimate()" class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md" style="background:linear-gradient(135deg,#22c55e,#16a34a);">
                             <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                         </div>
                         <span class="text-xs font-semibold text-slate-700 text-center leading-tight">Estimate</span>
                     </button>
-                    <button class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
+                    <button onclick="IQ.newCallLog()" class="flex flex-col items-center gap-2 p-2 rounded-xl active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md" style="background:linear-gradient(135deg,#a855f7,#9333ea);">
                             <svg width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 13 19.79 19.79 0 0 1 1.93 4.35 2 2 0 0 1 3.9 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
@@ -298,15 +302,15 @@
 
             <!-- Filter Chips -->
             <div class="flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-1">
-                <button class="flex-shrink-0 text-white text-xs font-bold px-4 py-2.5 rounded-full" style="background:#0f172a;">All (8)</button>
-                <button class="flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">In Progress (5)</button>
-                <button class="flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">Scheduled (4)</button>
-                <button class="flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">Completed (6)</button>
+                <button onclick="IQ.filterJobs('all',this)" class="job-chip flex-shrink-0 text-white text-xs font-bold px-4 py-2.5 rounded-full" style="background:#0f172a;">All (8)</button>
+                <button onclick="IQ.filterJobs('In Progress',this)" class="job-chip flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">In Progress (5)</button>
+                <button onclick="IQ.filterJobs('Scheduled',this)" class="job-chip flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">Scheduled (4)</button>
+                <button onclick="IQ.filterJobs('Completed',this)" class="job-chip flex-shrink-0 text-slate-600 text-xs font-semibold px-4 py-2.5 rounded-full card shadow-sm">Completed (6)</button>
             </div>
 
             <div class="space-y-3">
                 <!-- Job Card Component -->
-                <div class="card p-4">
+                <div onclick="IQ.openJob(0)" data-status="In Progress" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1043</p>
@@ -334,7 +338,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openJob(1)" data-status="In Progress" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1044</p>
@@ -359,7 +363,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openJob(2)" data-status="Scheduled" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1045</p>
@@ -387,7 +391,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openJob(3)" data-status="In Progress" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1046</p>
@@ -412,7 +416,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openJob(4)" data-status="Completed" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1047</p>
@@ -437,7 +441,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openJob(5)" data-status="Scheduled" class="job-card card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">#1048</p>
@@ -487,7 +491,7 @@
 
             <!-- Lead Cards -->
             <div class="space-y-3">
-                <div class="card p-4">
+                <div onclick="IQ.openLead(0)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#dbeafe;color:#1d4ed8;">DC</div>
                         <div class="flex-1 min-w-0">
@@ -505,7 +509,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openLead(1)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#ffedd5;color:#c2410c;">SR</div>
                         <div class="flex-1 min-w-0">
@@ -522,7 +526,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openLead(2)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#dcfce7;color:#15803d;">MJ</div>
                         <div class="flex-1 min-w-0">
@@ -539,7 +543,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openLead(3)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#f3e8ff;color:#9333ea;">LP</div>
                         <div class="flex-1 min-w-0">
@@ -556,7 +560,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openLead(4)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#ccfbf1;color:#0f766e;">BW</div>
                         <div class="flex-1 min-w-0">
@@ -573,7 +577,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openLead(5)" class="card p-4 tappable">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:#fef9c3;color:#a16207;">AT</div>
                         <div class="flex-1 min-w-0">
@@ -609,7 +613,7 @@
             </div>
 
             <div class="space-y-3">
-                <div class="card p-4">
+                <div onclick="IQ.openEstimate(0)" class="card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">EST-2041</p>
@@ -627,7 +631,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openEstimate(1)" class="card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">EST-2042</p>
@@ -645,7 +649,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4" style="border:1.5px solid #dcfce7;">
+                <div onclick="IQ.openEstimate(2)" class="card p-4 tappable" style="border:1.5px solid #dcfce7;">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">EST-2040</p>
@@ -663,7 +667,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openEstimate(3)" class="card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">EST-2039</p>
@@ -681,7 +685,7 @@
                     </div>
                 </div>
 
-                <div class="card p-4">
+                <div onclick="IQ.openEstimate(4)" class="card p-4 tappable">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <p class="text-xs text-slate-400 font-semibold">EST-2038</p>
@@ -713,27 +717,27 @@
                 <div class="flex justify-between items-center">
                     <div class="flex flex-col items-center gap-1.5">
                         <span class="text-xs text-slate-500 font-medium">Thu</span>
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold text-white" style="background:#f97316;">10</div>
+                        <div onclick="IQ.switchDay('Thursday',this)" data-weekend="0" class="day-circle w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold text-white" style="background:#f97316;">10</div>
                         <div class="w-1.5 h-1.5 rounded-full" style="background:#f97316;"></div>
                     </div>
                     <div class="flex flex-col items-center gap-1.5">
                         <span class="text-xs text-slate-500 font-medium">Fri</span>
-                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">11</div>
+                        <div onclick="IQ.switchDay('Friday',this)" data-weekend="0" class="day-circle w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">11</div>
                         <div class="w-1.5 h-1.5 rounded-full" style="background:#f97316;"></div>
                     </div>
                     <div class="flex flex-col items-center gap-1.5">
                         <span class="text-xs text-slate-500 font-medium">Sat</span>
-                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">12</div>
+                        <div onclick="IQ.switchDay('Saturday',this)" data-weekend="1" class="day-circle w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">12</div>
                         <div class="w-1.5 h-1.5 rounded-full" style="background:#3b82f6;"></div>
                     </div>
                     <div class="flex flex-col items-center gap-1.5">
                         <span class="text-xs text-slate-500 font-medium">Sun</span>
-                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-400">13</div>
+                        <div onclick="IQ.switchDay('Sunday',this)" data-weekend="1" class="day-circle w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-400">13</div>
                         <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
                     </div>
                     <div class="flex flex-col items-center gap-1.5">
                         <span class="text-xs text-slate-500 font-medium">Mon</span>
-                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">14</div>
+                        <div onclick="IQ.switchDay('Monday',this)" data-weekend="0" class="day-circle w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700">14</div>
                         <div class="w-1.5 h-1.5 rounded-full" style="background:#a855f7;"></div>
                     </div>
                 </div>
@@ -961,5 +965,6 @@ function initCharts() {
 }
 </script>
 
+<script src="interactions.js"></script>
 </body>
 </html>
